@@ -1,0 +1,8 @@
+language: julia
+os:
+  - windows
+julia:
+  - 1.1
+  - nightly
+notifications:
+  email: false
