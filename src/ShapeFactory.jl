@@ -9,8 +9,6 @@ include("ShapeVariant.jl")
 
 # ITypeInfo machinery.
 
-
-
 function com_getfuncdesc(type_info::Ptr{ITypeInfo}, idx::Cuint)
     desc = Ref(Ptr{FUNCDESC}(0))
     func = unsafe_load(unsafe_load(Ptr{Ptr{Ptr{Cvoid}}}(type_info)), 6)
