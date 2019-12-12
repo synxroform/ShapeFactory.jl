@@ -2,8 +2,8 @@
 using ShapeFactory
 
 
-cat = dispatch("CATIA.Application")
-prt = cat.ActiveDocument.Part
+app = dispatch("CATIA.Application")
+prt = app.ActiveDocument.Part
 
 
 # running rectangle example
@@ -66,3 +66,5 @@ function ex_a(num::Integer, rad::Real)
     prt.Update()
 
 end
+
+ex_a(10, 10)
