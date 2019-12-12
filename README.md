@@ -1,4 +1,4 @@
-<p align="center"><img src="/images/github_shapefactory_logo.png" height=200/></p>
+
 <h3> About </h3>
 
 <p align="justify">
@@ -32,7 +32,7 @@ Random points in xy plane
 
 ```julia
 r = () -> rand(1:100, 20)
-fac.AddNewPointCoord.(r(), r(), 0)
+pts = fac.AddNewPointCoord.(r(), r(), 0)
 ```
 
 Concentric circles
@@ -43,8 +43,15 @@ cen = fac.AddNewPointCoord(0, 0, 0)
 con = fac.AddNewCircleCtrRad.(cen, pln, false, 10:10:100)
 ```
 
+Sine approximated by lines
+
+```julia
+    pts = fac.AddNewPointCoord.(sin.(0:2pi/10:2pi) * 10, 0:5:50, 0)
+    lns = fac.AddNewLinePtPt.(pts[1:end-1], pts[2:end])
+```
+
 As you can see, all constructors vectorized and entire library preserve object oriented paradigm of CATIA Automation API.
 
 <h3> More examples </h3>
 
-More examples can be found in <a href="https://github.com/zaika-generative/ShapeFactory/tree/master/examples">\examples</a> directory of the master branch.
+More examples can be found in \examples directory of the master branch.
