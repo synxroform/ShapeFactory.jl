@@ -1,11 +1,11 @@
 module ShapeFactory
 
 
-export dispatch
+export dispatch, dispaxxx, IDispatch
 
 include("ShapeDispatch.jl")
 include("ShapeVariant.jl")
-
+include("ShapeSimplex.jl")
 
 # ITypeInfo machinery.
 
@@ -61,7 +61,7 @@ function com_gettypedata(obj::Ptr{IDispatch})
     attr = com_gettypeattr(info)
 
     get!(type_cache, hash(attr.guid)) do
-        tdata = TypeData(info, Dict{String, FuncData}())
+        tdata = TypeData(info, Dict{Symbol, FuncData}())
         for n in 0:attr.cFuncs - 1
             fd = unsafe_load(com_getfuncdesc(info, Cuint(n)))
             name = com_getfuncname(info, fd)
@@ -85,9 +85,6 @@ end
 
 
 function com_invoke(obj::ComObject, name::Symbol, flags::UInt16, args::Ref{DISPPARAMS}, ret::Ptr{Variant})
-    if !(name in keys(obj.dat.func))
-        error("SF: there is no member $(name) on COM object.")
-    end
     fptr = unsafe_load(unsafe_load(Ptr{Ptr{Ptr{Cvoid}}}(obj.ptr)), 7)
     ccall(fptr, Cint, (Ptr{IDispatch}, Clong, Ref{GUID}, UInt32, UInt16, Ref{DISPPARAMS}, Ptr{Variant}, Ptr{Cvoid}, Ptr{Cvoid}), 
     obj.ptr, obj.dat.func[name].memid, IID_NULL, LCID, flags, args, ret, C_NULL, C_NULL)
@@ -138,7 +135,7 @@ function com_callfunc(obj::ComObject, name::Symbol, args::Array{Variant})
 end
 
 
-function comcall(obj::ComObject, name::Symbol, args...)
+function comcall(obj::ComObject, name::Symbol, args)
     if length(args) == 0
         return com_callmethod(obj, name)
     else
@@ -148,24 +145,46 @@ end
 
 
 function Base.getproperty(idsp::Ptr{IDispatch}, name::Symbol)
-
     dat = com_gettypedata(idsp)
+    if !(name in keys(dat.func))
+        error("SF: there is no member $(name) on COM object.")
+    end
     obj = ComObject(idsp, dat)
     if (dat.func[name].invoke_mask & 0x1) > 0
-        return (args...) -> comcall(obj, name, args...)
+        return (args...) -> comcall(obj, name, args)
     else
         return com_callmethod(obj, name, 0x0002)
     end
 end
 
 
+# special treatment of arrays
+#
+function Base.getproperty(idspa::Array{Ptr{IDispatch}}, name::Symbol)
+    dat = com_gettypedata(idspa[1])
+    if !(name in keys(dat.func))
+        error("SF: there is no member $(name) on COM object.")
+    end
+    objs = ComObject.(idspa, Ref(dat))
+    if (dat.func[name].invoke_mask & 0x1) > 0
+        return (args...) -> comcall.(objs, name, Ref(args))
+    else
+        return com_callmethod.(objs, name, 0x0002)
+    end
+end
+
+
 function Base.setproperty!(idsp::Ptr{IDispatch}, name::Symbol, value)
     dat = com_gettypedata(idsp)
+    if !(name in keys(dat.func))
+        error("SF: there is no member $(name) on COM object.")
+    end
     obj = ComObject(idsp, dat)
     var = Ref(Variant(value))
     pid = [Int32(-3)]
     arg = Ref(DISPPARAMS(Ptr{Variant}(pointer_from_objref(var)), pointer(pid), 1, 1))
     com_invoke(obj, name, 0x0004, arg, Ptr{Variant}(C_NULL))
+    variant_free(var[])
 end
 
 
@@ -179,9 +198,16 @@ function dispatch(name::String)
 
     pdisp = Ref(Ptr{IDispatch}(0))
     err = ccall((:CoCreateInstance, "ole32.dll"), Cint, (Ref{GUID}, Ptr{IUnknown}, Cuint, GUID, Ref{Ptr{IDispatch}}), 
-            guid, C_NULL, CLSCTX_ALL, IID_IDispatch, pdisp)
+            guid, C_NULL, CLSCTX_SERVER, IID_IDispatch, pdisp)
+
+    if (err != 0)
+        error("Failed to create IDispatch")
+    end
 
     return pdisp[]
 end
+
+
+dispaxxx(name::String) = Ptr{IDispaxxx}(dispatch(name))
 
 end

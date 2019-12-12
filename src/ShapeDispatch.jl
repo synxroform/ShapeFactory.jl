@@ -8,24 +8,26 @@ struct GUID
     d4::NTuple{8, Cuchar}
 end
 
-const IID_ITypeInfo = GUID(0x00020401, 0x0000, 0x0000, (0xc0,0x00, 0x00,0x00,0x00,0x00,0x00,0x46))
-const IID_IDispatch = GUID(0x00020400, 0x0000, 0x0000, (0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46))
-const IID_NULL = GUID(0, 0, 0, (0, 0, 0, 0, 0, 0, 0, 0))
+const IID_ITypeInfo  = GUID(0x00020401, 0x0000, 0x0000, (0xc0,0x00, 0x00,0x00,0x00,0x00,0x00,0x46))
+const IID_IDispatch  = GUID(0x00020400, 0x0000, 0x0000, (0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46))
+const IID_NULL       = GUID(0, 0, 0, (0, 0, 0, 0, 0, 0, 0, 0))
 
 const CLSCTX_ALL = 0x1 | 0x2 | 0x4 | 0x10
+const CLSCTX_SERVER = 0x1 | 0x4 | 0x10
 const LCID = ccall((:GetUserDefaultLCID, "kernel32.dll"), Cint, ())
 
 
-const PARAMFLAG_OUT = UInt16(0x2)
+const PARAMFLAG_OUT  = UInt16(0x2)
 const VT_USERDEFINED = UInt16(29)
-const VT_VARIANT = UInt16(12)
-const VT_ARRAY = UInt16(0x2000)
-const VT_BYREF = UInt16(0x4000)
-const VT_TYPEMASK = UInt16(0xfff)
+const VT_VARIANT     = UInt16(12)
+const VT_ARRAY       = UInt16(0x2000)
+const VT_BYREF       = UInt16(0x4000)
+const VT_TYPEMASK    = UInt16(0xfff)
 
 
 abstract type IUnknown end
 abstract type IDispatch end
+abstract type IDispaxxx end
 abstract type ITypeInfo end
 
 
@@ -94,6 +96,17 @@ struct TYPEATTR
     idldescType::IDLDESC
 end
 
+struct EXCEPINFO
+    wCode::Cushort
+    wReserved::Cushort
+    bstrSource::Ptr{UInt16}
+    bstrDescription::Ptr{UInt16}
+    bstrHelpFile::Ptr{UInt16}
+    dwHelpContext::Cushort
+    pvReserved::Ptr{Cvoid}
+    pfnDeferredFillIn::Ptr{Cvoid}
+    scode::Clong
+end
 
 struct FUNCDESC
     memid::Clong
