@@ -46,8 +46,8 @@ con = fac.AddNewCircleCtrRad.(cen, pln, false, 10:10:100)
 Sine approximated by lines
 
 ```julia
-    pts = fac.AddNewPointCoord.(sin.(0:2pi/10:2pi) * 10, 0:5:50, 0)
-    lns = fac.AddNewLinePtPt.(pts[1:end-1], pts[2:end])
+pts = fac.AddNewPointCoord.(sin.(0:2pi/10:2pi) * 10, 0:5:50, 0)
+lns = fac.AddNewLinePtPt.(pts[1:end-1], pts[2:end])
 ```
 
 As you can see, all constructors vectorized and entire library preserve object oriented paradigm of CATIA Automation API.
