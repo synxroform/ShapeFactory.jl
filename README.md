@@ -1,4 +1,4 @@
-<img style="display:block; text-align:center" height=200px src="images/github_shapefactory_logo.png"/>
+<p align="center"><img height="200px" src="images/github_shapefactory_logo.png" /></p>
 <h3> About </h3>
 
 <p align="justify">
