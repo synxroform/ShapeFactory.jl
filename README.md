@@ -4,7 +4,7 @@
 <p align="justify">
 ShapeFactory library is intended to facilitate the usage of high-performance numerical methods in architecture and design.
 Based on IDispatch interface it removes all unnecessary features, such as support for multiple platforms, or creation of COM servers.
-Roughly speaking this library address specific CATIA platform, instead of trying to incorporate entire COM implementation.
+Roughly speaking this library addresses specific CATIA platform, instead of trying to incorporate entire COM implementation.
 Compared to more general win32com libraries, this means better support for CATIA automation developers and ability to do breaking changes
 for the sake of better CATIA programming experience. Also, due to Julia transparent interaction with C or Fortran, all enterprise knowledge
 can be represented in clean and fast code, without annoying boilerplate or heavy and slow frameworks. Generative design field deals mainly
