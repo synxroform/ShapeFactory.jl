@@ -2,3 +2,6 @@ name = "ShapeFactory"
 uuid = "5f2830c0-a9f2-11e9-177d-47448fa133db"
 authors = ["__zaika_dns"]
 version = "0.1.0"
+
+[compat]
+julia = "1.2"
