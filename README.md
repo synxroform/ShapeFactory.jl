@@ -10,9 +10,9 @@ for the sake of better CATIA programming experience. Also, due to Julia transpar
 can be represented in clean and fast code, without annoying boilerplate or heavy and slow frameworks. Generative design field deals mainly
 with computational methods, this is somewhat different from software development, therefore it is better to use specialized platform full of
 sophisticated algorithms. </p>
-
+<br>
 <p align="center"><img src="images/bosjes_chapel.png"/></p>
-
+<br>
 <h3> Installation </h3>
 
 ```
