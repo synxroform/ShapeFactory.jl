@@ -11,6 +11,8 @@ can be represented in clean and fast code, without annoying boilerplate or heavy
 with computational methods, this is somewhat different from software development, therefore it is better to use specialized platform full of
 sophisticated algorithms. </p>
 
+<p align="center"><img height="200px" src="images/bosjes_chapel.png"/></p>
+
 <h3> Installation </h3>
 
 ```
