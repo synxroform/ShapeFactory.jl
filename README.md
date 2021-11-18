@@ -56,4 +56,4 @@ As you can see, all constructors vectorized and entire library preserve object o
 
 <h3> More examples </h3>
 
-More examples can be found in \examples directory of the master branch.
+More examples can be found in **examples** directory of the master branch.
